@@ -13,72 +13,83 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.SessionAttributes;
 import org.springframework.web.bind.support.SessionStatus;
-
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.bolsadeideas.springboot.app.model.entity.Cliente;
 import com.bolsadeideas.springboot.app.model.service.IClienteService;
 
 @Controller
-@SessionAttributes("cliente") //mantener la sesion para el id
+@SessionAttributes("cliente") // mantener la sesion para el id
 public class ClienteControler {
-	
+
 	@Autowired
 	private IClienteService clienteService;
-	
-	//Listar CLIENTES
-	@RequestMapping(value="/listar", method=RequestMethod.GET)
+
+	// Listar CLIENTES
+	@RequestMapping(value = "/listar", method = RequestMethod.GET)
 	public String listar(Model model) {
-		model.addAttribute("titulo", "Listado de cliente");
+		model.addAttribute("titulo", "Listado de Cliente");
 		model.addAttribute("clientes", clienteService.findAll());
 		return "listar";
 	}
-	
+
 	// Form Crear Get
-	@RequestMapping(value="/form")
-	//Puede recibir el objeto model o un mapa
-	public String crear(Map <String, Object> model) {
-		
+	@RequestMapping(value = "/form")
+	// Puede recibir el objeto model o un mapa
+	public String crear(Map<String, Object> model) {
+
 		Cliente cliente = new Cliente();
-		
+
 		model.put("cliente", cliente);
 		model.put("titulo", "Formulario de Cliente");
 		return "form";
 	}
-	
-	//Form Crear Post
-	@RequestMapping(value="/form", method=RequestMethod.POST)
-	public String guardar(@Valid Cliente cliente, BindingResult result, Model model, SessionStatus status) {
+
+	// Form Crear Post
+	@RequestMapping(value = "/form", method = RequestMethod.POST)
+	public String guardar(@Valid Cliente cliente, BindingResult result, Model model, RedirectAttributes flash,
+			SessionStatus status) {
+		
 		if (result.hasErrors()) {
 			model.addAttribute("titulo", "Formulario de Cliente");
 			return "form";
 		}
-		
+		//Determinar si edita o crea en relacion a la existencia del id
+		String mensajeFlash = (cliente.getId() != null) ? "Cliente editado con exito!" : "Cliente creado con éxito";
+
 		clienteService.save(cliente);
-		status.setComplete(); //Finalizar la sesion
+		status.setComplete(); // Finalizar la sesion
+		flash.addFlashAttribute("success", mensajeFlash); // Mensaje de creacion al usuario
 		return "redirect:listar";
 	}
-	
+
 	// Form Editar Get
-	@RequestMapping(value="/form/{id}")
-	public String editar(@PathVariable(value="id") Long id, Map<String, Object> model) {
-		
+	@RequestMapping(value = "/form/{id}")
+	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+
 		Cliente cliente = null;
-		
-		if(id > 0) {
+
+		if (id > 0) {
 			cliente = clienteService.findOne(id);
+			if (cliente == null) {
+				flash.addFlashAttribute("error", "El ID del cliente no existe en la BD!");
+				return "redirect:/listar";
+			}
 		} else {
+			flash.addFlashAttribute("error", "El ID del cliente no puede ser cero!");
 			return "redirect:/listar";
 		}
-		
+
 		model.put("cliente", cliente);
 		model.put("titulo", "Editar Cliente");
 		return "form";
 	}
-	
-	@RequestMapping(value="/eliminar/{id}")
-	public String eliminar(@PathVariable(value="id") Long id) {
-		if(id > 0) {
+
+	@RequestMapping(value = "/eliminar/{id}")
+	public String eliminar(@PathVariable(value = "id") Long id, RedirectAttributes flash) {
+		if (id > 0) {
 			clienteService.delete(id);
+			flash.addFlashAttribute("success", "Cliente Eliminado con éxito!");
 		}
 		return "redirect:/listar";
 	}

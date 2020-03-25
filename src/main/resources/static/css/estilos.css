@@ -1,0 +1,9 @@
+.imagen-spring {
+	width: 250px;
+	height: 200px;
+	
+	/*background-size: 25px 50px;
+	background-size: 50% 50%*/
+	display:block;
+	margin:auto;
+}

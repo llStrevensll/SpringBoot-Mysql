@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head">
+<meta charset="UTF-8" />
+<title
+	th:text="'Spring Boot: MVC + Thymeleaf + Data JPA - ' + ${titulo}"></title>
+<link rel="stylesheet"
+	th:href="@{/css/bootstrap.min.css}" />
+<link rel="stylesheet"
+	th:href="@{/css/estilos.css}" />
+
+</head>
+<body>
+	<header th:fragment="header">
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+			<a class="navbar-brand" href="#">Spring Boot</a>
+			<button class="navbar-toggler" type="button" data-toggle="collapse"
+				data-target="#navbarSupportedContent"
+				aria-controls="navbarSupportedContent" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+
+			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+				<ul class="navbar-nav mr-auto">
+					<li class="nav-item active"><a class="nav-link" href="#">Home
+							<span class="sr-only">(current)</span>
+					</a></li>
+					<li class="nav-item"><a class="nav-link" th:href="@{/listar}">Clientes</a>
+					</li>
+				</ul>
+			</div>
+		</nav>
+		
+		<div class="alert alert-success" th:if="${success != null}" th:text="${success}"></div>
+		<div class="alert alert-danger" th:if="${error != null}" th:text="${error}"></div>
+		<div class="alert alert-warning" th:if="${warning != null}" th:text="${warning}"></div>
+		<div class="alert alert-info" th:if="${info != null}" th:text="${info}"></div>
+	</header>
+	<div class="container"></div>
+
+	<footer th:fragment="footer" class="container">
+		<hr />
+		<img th:src="@{/images/spring.png}" alt="Spring Logo" class="img-fluid imagen-spring" />
+		<p class="text-center">
+			Power by <a href="https://spring.io/" target="_blanck">Spring Boot</a> y <a
+				href="https://www.thymeleaf.org/" target="_blanck">Thymeleaf</a>
+		</p>
+		<p class=" font-weight-bold lead text-center bg-warning mt-5 p-5">
+			<span>[[ #{layout.pie-pagina} ]] &copy; <a
+				href="https://github.com/llStrevensll" target="_blanck">llStrevensll</a></span>
+		</p>
+
+		<script th:src="@{/js/jquery-3.4.1.min.js}"></script>
+		<script
+			th:src="@{/js/popper.min.js}"></script>
+		<script
+			th:src="@{/js/bootstrap.min.js}"></script>
+	</footer>
+</body>
+</html>
