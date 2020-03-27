@@ -12,6 +12,12 @@ CRUD con SpringBoot y Mysql
 - Mensaje de Error
 - Service
 - Mysql
+---
+- Fragments thymeleaf
+- FlashMessage
+- Paginator
+- Cargar Imagenes
+- UploadService
 
 **App**
 
