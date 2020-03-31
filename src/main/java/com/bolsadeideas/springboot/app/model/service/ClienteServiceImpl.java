@@ -10,13 +10,18 @@ import org.springframework.transaction.annotation.Transactional;
 
 //import com.bolsadeideas.springboot.app.model.dao.IClienteDao;
 import com.bolsadeideas.springboot.app.model.dao.IClienteDaoRepository;
+import com.bolsadeideas.springboot.app.model.dao.IProductoDao;
 import com.bolsadeideas.springboot.app.model.entity.Cliente;
+import com.bolsadeideas.springboot.app.model.entity.Producto;
 
 @Service
 public class ClienteServiceImpl implements IClienteService{
 	
 	@Autowired
 	private IClienteDaoRepository clienteDao;
+	
+	@Autowired
+	private IProductoDao productoDao;
 	
 	@Override
 	@Transactional(readOnly=true)
@@ -49,6 +54,14 @@ public class ClienteServiceImpl implements IClienteService{
 	@Transactional(readOnly=true)
 	public Page<Cliente> findAll(Pageable pageable) {
 		return clienteDao.findAll(pageable);
+	}
+
+	@Override
+	@Transactional(readOnly = true)
+	public List<Producto> findByNombre(String term) {
+		// TODO Auto-generated method stub
+		//return productoDao.findByNombre(term);
+		return productoDao.findByNombreLikeIgnoreCase("%"+term+"%");
 	}
 
 }

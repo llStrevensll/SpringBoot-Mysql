@@ -1,13 +1,18 @@
 package com.bolsadeideas.springboot.app.model.entity;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 //import javax.persistence.PrePersist;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
@@ -47,6 +52,10 @@ public class Cliente implements Serializable{
 	@DateTimeFormat(pattern="yyyy-MM-dd")
 	private Date createAt;
 	
+	//mappedBy = "cliente" - crea de forma automatica la llave foranea cliente_id en la tabla facturas
+	@OneToMany(mappedBy = "cliente" ,fetch=FetchType.LAZY, cascade=CascadeType.ALL, orphanRemoval = true) //Lazy- carga perezosa, cascade- en secuencia Ej: si el cliente se elimina tambien se elminan todas su facturas, si se persiste el cliente tambien sus elementos hijos, orphanRemoval->sirve ára eliminar registros huerfanos que no estan asociados a ningun cliente
+	private List<Factura> facturas;//Un cliente puede tener muchas facturas - por ello lista de facturas
+	
 	private String foto;
 	
 	/*
@@ -55,7 +64,12 @@ public class Cliente implements Serializable{
 	public void prePersist() {
 		createAt = new Date();
 	}*/
-
+	
+	public Cliente() {
+		facturas = new ArrayList<Factura>();
+	}
+	
+	
 	public Long getId() {
 		return id;
 	}
@@ -104,9 +118,19 @@ public class Cliente implements Serializable{
 		this.foto = foto;
 	}
 
-	public static long getSerialversionuid() {
-		return serialVersionUID;
+	public List<Factura> getFacturas() {
+		return facturas;
 	}
+
+	public void setFacturas(List<Factura> facturas) {
+		this.facturas = facturas;
+	}
+
+	// Adicionar factura a la lista
+	public void addFactura(Factura factura) {
+		facturas.add(factura);
+	}
+	
 
 	
 	

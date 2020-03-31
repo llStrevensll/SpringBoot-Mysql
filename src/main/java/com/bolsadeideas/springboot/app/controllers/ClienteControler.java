@@ -4,9 +4,7 @@ import java.io.IOException;
 import java.net.MalformedURLException;
 import java.util.Map;
 
-
 import javax.validation.Valid;
-
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -107,6 +105,28 @@ public class ClienteControler {
 		return "form";
 	}
 
+	// Form Editar Get
+	@RequestMapping(value = "/form/{id}")
+	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
+
+		Cliente cliente = null;
+
+		if (id > 0) {
+			cliente = clienteService.findOne(id);
+			if (cliente == null) {
+				flash.addFlashAttribute("error", "El ID del cliente no existe en la BD!");
+				return "redirect:/listar";
+			}
+		} else {
+			flash.addFlashAttribute("error", "El ID del cliente no puede ser cero!");
+			return "redirect:/listar";
+		}
+
+		model.put("cliente", cliente);
+		model.put("titulo", "Editar Cliente");
+		return "form";
+	}
+
 	// Form Guardar : Crear - Editar Post
 	@RequestMapping(value = "/form", method = RequestMethod.POST)
 	public String guardar(@Valid Cliente cliente, BindingResult result, Model model,
@@ -152,28 +172,6 @@ public class ClienteControler {
 		status.setComplete(); // Finalizar la sesion
 		flash.addFlashAttribute("success", mensajeFlash); // Mensaje de creacion al usuario
 		return "redirect:listar";
-	}
-
-	// Form Editar Get
-	@RequestMapping(value = "/form/{id}")
-	public String editar(@PathVariable(value = "id") Long id, Map<String, Object> model, RedirectAttributes flash) {
-
-		Cliente cliente = null;
-
-		if (id > 0) {
-			cliente = clienteService.findOne(id);
-			if (cliente == null) {
-				flash.addFlashAttribute("error", "El ID del cliente no existe en la BD!");
-				return "redirect:/listar";
-			}
-		} else {
-			flash.addFlashAttribute("error", "El ID del cliente no puede ser cero!");
-			return "redirect:/listar";
-		}
-
-		model.put("cliente", cliente);
-		model.put("titulo", "Editar Cliente");
-		return "form";
 	}
 
 	// Eliminar Get
