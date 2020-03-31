@@ -6,6 +6,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import com.bolsadeideas.springboot.app.model.entity.Cliente;
+import com.bolsadeideas.springboot.app.model.entity.Factura;
 import com.bolsadeideas.springboot.app.model.entity.Producto;
 
 public interface IClienteService {
@@ -20,5 +21,13 @@ public interface IClienteService {
 	
 	public void delete(Long id);
 	
+	//Producto
 	public List<Producto> findByNombre(String term);
+	
+	public Producto findProductoById(Long id);
+	
+	//Factura
+	public void saveFactura(Factura factura);
+	
+	
 }
