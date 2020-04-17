@@ -19,6 +19,11 @@ CRUD con SpringBoot y Mysql
 - Cargar Imagenes
 - UploadService
 
+---
+- Sistema Facturación
+- Asociaciones ManyToOne Bidireccional, OneToMany Unidireccional, ManyToOne Unidireccional
+- Factura, LineFactura, Producto
+
 **App**
 
 <p align="center">
